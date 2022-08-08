@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "time-range-picker",
+    "libraryId": "e94bfa34-1991-4822-af3c-5cdef25b43dd",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "time-range-picker",
+    "solutionShortDescription": "time-range-picker description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

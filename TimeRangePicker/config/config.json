@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "time-range-picker-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/timeRangePicker/TimeRangePickerWebPart.js",
+          "manifest": "./src/webparts/timeRangePicker/TimeRangePickerWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "TimeRangePickerWebPartStrings": "lib/webparts/timeRangePicker/loc/{locale}.js"
+  }
+}

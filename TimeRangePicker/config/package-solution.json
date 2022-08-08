@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "time-range-picker-client-side-solution",
+    "id": "e94bfa34-1991-4822-af3c-5cdef25b43dd",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "time-range-picker description"
+      },
+      "longDescription": {
+        "default": "time-range-picker description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "time-range-picker Feature",
+        "description": "The feature that activates elements of the time-range-picker solution.",
+        "id": "bf9c2eaa-9164-4694-a9a7-f739dd347ab4",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/time-range-picker.sppkg"
+  }
+}
