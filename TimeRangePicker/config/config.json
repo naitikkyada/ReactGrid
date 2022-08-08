@@ -11,7 +11,12 @@
       ]
     }
   },
-  "externals": {},
+  "externals": {
+    "jquery":{
+      "path": "./src/webparts/timeRangePicker/assets/jquery.min.js",
+      "globalName": "jquery"
+    }
+  },
   "localizedResources": {
     "TimeRangePickerWebPartStrings": "lib/webparts/timeRangePicker/loc/{locale}.js"
   }

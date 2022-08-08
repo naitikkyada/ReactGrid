@@ -4,4 +4,5 @@ export interface ITimeRangePickerProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
+  spfxContext: any;
 }
