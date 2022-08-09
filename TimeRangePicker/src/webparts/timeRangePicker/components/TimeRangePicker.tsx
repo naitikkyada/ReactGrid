@@ -4,7 +4,7 @@ import { ITimeRangePickerProps } from './ITimeRangePickerProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { SPComponentLoader } from '@microsoft/sp-loader';
 import pnp from 'sp-pnp-js';
-import { Checkbox } from '@fluentui/react';
+import { Checkbox, PrimaryButton } from '@fluentui/react';
 require('jquery');
 declare var $: any;
 require('../assets/jqueryUi.min.js');
@@ -18,6 +18,8 @@ export interface ITimeRangePickerState {
   CheckedItem: any;
   StartTime: any;
   EndTime: any;
+  UpdatedDays: any;
+  disableBtn: boolean;
 }
 let myThis: any;
 export default class TimeRangePicker extends React.Component<ITimeRangePickerProps, ITimeRangePickerState> {
@@ -31,7 +33,9 @@ export default class TimeRangePicker extends React.Component<ITimeRangePickerPro
       CheckboxData: [],
       CheckedItem: [],
       StartTime: [],
-      EndTime: []
+      EndTime: [],
+      UpdatedDays: [],
+      disableBtn: false
     };
     myThis = this;
   }
@@ -44,22 +48,24 @@ export default class TimeRangePicker extends React.Component<ITimeRangePickerPro
             return (
               <div className='row' style={{ margin: '10px' }}>
                 <div className='col-sm-3'>
-                  <Checkbox label={data.wsp_ucc_day} onChange={(e, values) => { let item: any[] = this.state.CheckedItem; item[data.ID] = values; this.setState({ CheckedItem: item }, () => { this.bindSlider(data.ID); }); }} />
+                  <Checkbox label={data.wsp_ucc_day} onChange={(e, values) => { let item: any[] = this.state.CheckedItem; item[data.ID] = values; let Days: any[] = this.state.UpdatedDays; Days.push(data.ID); this.setState({ CheckedItem: item, UpdatedDays: Days }, () => { this.bindSlider(data.ID) }); }} />
                 </div>
-                {
-                  this.state.CheckedItem[data.ID] &&
-                  <div id="time-range" className='col-sm-9'>
-                    <p>Time Range: <span className={"slider-time" + data.ID}>{data.wsp_ucc_Start}</span> - <span className={"slider-time2" + data.ID}>{data.wsp_ucc_End}</span>
-                    </p>
-                    <div className="sliders_step1">
-                      <div id={"slider-range" + data.ID}></div>
-                    </div>
-                  </div>
-                }
+                <div id="time-range" className='col-sm-9'>
+                  <p>Time Range: <span className={"slider-time"}>{this.state.StartTime.length > 0 ? this.state.StartTime[data.ID] : 0}</span> - <span className={"slider-time2"}>{this.state.EndTime.length > 0 ? this.state.EndTime[data.ID] : 0}</span>
+                  </p>
+                </div>
               </div>
             );
           })
         }
+        <div className='row'>
+          <div className="sliders_step1 col-sm-6">
+            <div id={"slider-range"}></div>
+          </div>
+        </div>
+        <div style={{ margin: '15px' }}>
+          <PrimaryButton disabled={this.state.disableBtn} text='Save' onClick={() => this.UpdateTime()} />
+        </div>
       </>
     );
   }
@@ -69,15 +75,21 @@ export default class TimeRangePicker extends React.Component<ITimeRangePickerPro
   }
 
   public getFromList() {
+    let EndTimeArray = this.state.EndTime;
+    let StartTimeArray = this.state.StartTime;
     pnp.sp.web.lists.getByTitle('TimesTemplate').items.getAll().then(async v => {
-      this.setState({ CheckboxData: v });
+      v.forEach((data: any) => {
+        EndTimeArray[data.ID] = data.wsp_ucc_End;
+        StartTimeArray[data.ID] = data.wsp_ucc_Start;
+      });
+      this.setState({ CheckboxData: v, StartTime: StartTimeArray, EndTime: EndTimeArray });
     }).catch(function (err) {
       console.log(err);
     });
   }
 
   public bindSlider(i: any) {
-    $(`#slider-range${i}`).slider({
+    $(`#slider-range`).slider({
       range: true,
       min: 0,
       max: 1440,
@@ -109,9 +121,14 @@ export default class TimeRangePicker extends React.Component<ITimeRangePickerPro
 
 
 
-        $(`.slider-time${i}`).html(hours1 + ':' + minutes1);
+        // $(`.slider-time${i}`).html(hours1 + ':' + minutes1);
+        // $(`.slider-time`).html(hours1 + ':' + minutes1);
         let StartTimeArray = myThis.state.StartTime;
-        StartTimeArray[i] = hours1 + ':' + minutes1;
+        myThis.state.UpdatedDays.forEach((day: any) => {
+          if (myThis.state.CheckedItem[day]) {
+            StartTimeArray[day] = hours1 + ':' + minutes1;
+          }
+        });
 
         var hours2 = Math.floor(ui.values[1] / 60);
         var minutes2 = (ui.values[1] - (hours2 * 60)).toString();
@@ -135,23 +152,41 @@ export default class TimeRangePicker extends React.Component<ITimeRangePickerPro
           minutes2 = minutes2 + " AM";
         }
 
-        $(`.slider-time2${i}`).html(hours2 + ':' + minutes2);
+        // $(`.slider-time2`).html(hours2 + ':' + minutes2);
+        // $(`.slider-time2${i}`).html(hours2 + ':' + minutes2);
         let EndTimeArray = myThis.state.EndTime;
-        EndTimeArray[i] = hours2 + ':' + minutes2;
+        myThis.state.UpdatedDays.forEach((day: any) => {
+          if (myThis.state.CheckedItem[day]) {
+            EndTimeArray[day] = hours2 + ':' + minutes2;
+          }
+        });
 
-        myThis.setState({ StatTime: StartTimeArray, EndTime: EndTimeArray }, () => { myThis.UpdateTime(i); });
+        myThis.setState({ StatTime: StartTimeArray, EndTime: EndTimeArray });
       }
     });
   }
 
-  public UpdateTime(ID: any) {
-    pnp.sp.web.lists.getByTitle('TimesTemplate').items.getById(ID).update({
-      wsp_ucc_Start: this.state.StartTime[ID],
-      wsp_ucc_End: this.state.EndTime[ID]
-    }).then((data) => {
-      console.log(data);
-    }).catch((error) => {
-      console.log(error);
-    });
+  public UpdateTime() {
+
+    this.state.UpdatedDays.length > 0 ?
+      this.state.UpdatedDays.forEach((Day: any, i: any) => {
+        this.setState({ disableBtn: true });
+        pnp.sp.web.lists.getByTitle('TimesTemplate').items.getById(Day).update({
+          wsp_ucc_Start: this.state.StartTime[Day],
+          wsp_ucc_End: this.state.EndTime[Day]
+        }).then((data) => {
+          if (this.state.UpdatedDays.length - 1 == i) {
+            alert("Saved successfully");
+            this.setState({ disableBtn: false });
+          }
+        }).catch((error) => {
+          if (this.state.UpdatedDays.length - 1 == i) {
+            this.setState({ disableBtn: false });
+          }
+          console.log(error);
+        });
+      })
+      :
+      console.log("No data updated");
   }
 }
