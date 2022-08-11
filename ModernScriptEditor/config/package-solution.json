@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "modern-script-editor-client-side-solution",
+    "id": "37ec9c85-9837-4f2e-b61f-de0d373c0d4e",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "modern-script-editor description"
+      },
+      "longDescription": {
+        "default": "modern-script-editor description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "modern-script-editor Feature",
+        "description": "The feature that activates elements of the modern-script-editor solution.",
+        "id": "4c3ef013-774c-4a95-9efd-0cdbbecc6968",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/modern-script-editor.sppkg"
+  }
+}

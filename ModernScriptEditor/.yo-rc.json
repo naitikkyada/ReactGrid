@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "modern-script-editor",
+    "libraryId": "37ec9c85-9837-4f2e-b61f-de0d373c0d4e",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "modern-script-editor",
+    "solutionShortDescription": "modern-script-editor description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
